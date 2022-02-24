@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	defaultString = "<no>"
+	defaultString = "NO"
 )
 
 var errNoNumProvided = errors.New("no number provided in line")

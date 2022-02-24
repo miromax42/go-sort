@@ -73,7 +73,7 @@ func printLines(filePath string, lines []line.Line) error {
 	table.SetFooter([]string{"", "", "", "Total", fmt.Sprintf("%d", len(lines))})
 	table.SetAutoMergeCellsByColumnIndex([]int{0})
 	table.SetHeaderAlignment(tablewriter.ALIGN_CENTER)
-	table.SetAlignment(tablewriter.ALIGN_LEFT)
+	table.SetColumnAlignment([]int{tablewriter.ALIGN_LEFT, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_CENTER, tablewriter.ALIGN_LEFT, tablewriter.ALIGN_RIGHT})
 	table.SetRowLine(true)
 	table.AppendBulk(data)
 	table.Render()
