@@ -20,11 +20,12 @@ func Test_new(t *testing.T) {
 		{
 			"t01",
 			args{
-				str: "d034",
+				str: "в034вв",
 			},
 			Line{
-				Prefix: "d",
-				num:    34,
+				Prefix:  "в",
+				num:     34,
+				postfix: "вв",
 			},
 			false,
 		},
@@ -63,12 +64,24 @@ func Test_new(t *testing.T) {
 		{
 			"test02",
 			args{
-				str: "d015    3m",
+				str: "в015 ыв3m",
 			},
 			Line{
 				Prefix:  "в",
 				num:     15,
-				postfix: " 3ц",
+				postfix: " ыв3m",
+			},
+			false,
+		},
+		{
+			"t01",
+			args{
+				str: "в18a015ц3",
+			},
+			Line{
+				Prefix:  "в18a",
+				num:     15,
+				postfix: "ц3",
 			},
 			false,
 		},

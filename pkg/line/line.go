@@ -25,18 +25,14 @@ type Line struct {
 }
 
 func newLine(str, group, date string) (line Line, err error) {
-	re := regexp.MustCompile(`0\d+`)
-	matchIndexes := re.FindAllStringIndex(str, -1)
-
-	if len(matchIndexes) == 0 {
+	position := getPosition(str)
+	if position[0] == 0 && position[1] == 0 {
 		return line, errNoNumProvided
 	}
 
-	position := matchIndexes[len(matchIndexes)-1]
-
 	line.Prefix = substr(str, 0, position[0])
 	line.num, _ = strconv.Atoi(substr(str, position[0], position[1]))
-	line.postfix = substr(str, position[1], len(str))
+	line.postfix = substr(str, position[1], len([]rune(str)))
 	line.group = group
 	line.date = date
 
@@ -45,6 +41,34 @@ func newLine(str, group, date string) (line Line, err error) {
 	}
 
 	return line, nil
+}
+
+func getPosition(str string) []int {
+	re := regexp.MustCompile(`(?m)\D0[0-9]+`)
+
+	matches := re.FindAllString(str, -1)
+	if len(matches) == 0 {
+		return []int{0, 0}
+	}
+
+	match := []rune(matches[len(matches)-1])
+	runeStr := []rune(str)
+
+	start := 0
+	end := 0
+
+loop:
+	for i := 0; i <= len(runeStr)-len(match); i++ {
+		for j := 0; j < len(match); j++ {
+			if runeStr[i+j] != match[j] {
+				continue loop
+			}
+		}
+		start = i + 1
+		end = i + len(match)
+	}
+
+	return []int{start, end}
 }
 
 func NewLines(sc *bufio.Scanner) (lines []Line, total int, err error) {
