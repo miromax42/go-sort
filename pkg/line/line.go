@@ -64,8 +64,6 @@ func NewLines(sc *bufio.Scanner) (lines []Line, total int, err error) {
 
 		typee, offset := getType(line)
 
-		fmt.Println(total, ": ", typee, " ", offset)
-
 		switch typee {
 		case groupType:
 			group = line[offset:]
