@@ -30,9 +30,9 @@ func newLine(str, group, date string) (line Line, err error) {
 		return line, errNoNumProvided
 	}
 
-	line.Prefix = substr(str, 0, position[0])
-	line.num, _ = strconv.Atoi(substr(str, position[0], position[1]))
-	line.postfix = substr(str, position[1], len([]rune(str)))
+	line.Prefix = str[0:position[0]]
+	line.num, _ = strconv.Atoi(str[position[0]:position[1]])
+	line.postfix = str[position[1]:]
 	line.group = group
 	line.date = date
 
@@ -44,31 +44,14 @@ func newLine(str, group, date string) (line Line, err error) {
 }
 
 func getPosition(str string) []int {
-	re := regexp.MustCompile(`(?m)\D0[0-9]+`)
+	re := regexp.MustCompile(`(?m)\D(0\d+)`)
 
-	matches := re.FindAllString(str, -1)
+	matches := re.FindAllStringSubmatchIndex(str, -1)
 	if len(matches) == 0 {
 		return []int{0, 0}
 	}
 
-	match := []rune(matches[len(matches)-1])
-	runeStr := []rune(str)
-
-	start := 0
-	end := 0
-
-loop:
-	for i := 0; i <= len(runeStr)-len(match); i++ {
-		for j := 0; j < len(match); j++ {
-			if runeStr[i+j] != match[j] {
-				continue loop
-			}
-		}
-		start = i + 1
-		end = i + len(match)
-	}
-
-	return []int{start, end}
+	return matches[len(matches)-1][2:]
 }
 
 func NewLines(sc *bufio.Scanner) (lines []Line, total int, err error) {
@@ -79,13 +62,17 @@ func NewLines(sc *bufio.Scanner) (lines []Line, total int, err error) {
 		line := sc.Text()
 		total++
 
-		switch getType(line) {
+		typee, offset := getType(line)
+
+		fmt.Println(total, ": ", typee, " ", offset)
+
+		switch typee {
 		case groupType:
-			group = substr(line, 2, len(line))
+			group = line[offset:]
 			date = defaultString
 
 		case dateType:
-			date = substr(line, 2, len(line))
+			date = line[offset:]
 
 		case lineType:
 			var pLine Line

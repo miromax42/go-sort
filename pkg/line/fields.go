@@ -1,5 +1,7 @@
 package line
 
+import "regexp"
+
 type field int
 
 const (
@@ -12,15 +14,18 @@ func (f field) String() string {
 	return []string{"group", "date", "line"}[f]
 }
 
-func getType(str string) field {
-	sb := substr(str, 0, 2)
+func getType(str string) (f field, offset int) {
+	re := regexp.MustCompile(`(?m)^-+`)
 
-	switch sb {
-	case "--":
-		return groupType
-	case " -":
-		return dateType
+	start := re.FindString(str)
+	offset = len(start)
+
+	switch offset {
+	case 2:
+		return groupType, offset
+	case 1:
+		return dateType, offset
 	default:
-		return lineType
+		return lineType, offset
 	}
 }

@@ -40,11 +40,11 @@ a01a2a034b1b02b3
 ```
 
 ### Sublist type
-> rule: starts with ` -`
+> rule: starts with `-`
 ```txt
- -1May
- -last
- -01.02.34
+-1May
+-last
+-01.02.34
 ```
 
 ## FullExample
@@ -53,11 +53,11 @@ a01a2a034b1b02b3
 file:
 ```txt
 --l1
- -010203
+-010203
 e1e02e3
 b03e3
 c03e345
- -020203
+-020203
 e1e03e3
 b04e3
 c02e345
