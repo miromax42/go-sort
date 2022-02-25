@@ -121,19 +121,7 @@ func (l *Line) Humanize() string {
 	return fmt.Sprintf("%10s:%05d - %s, g:%s, date: %s", l.Prefix, l.num, l.postfix, l.group, l.date)
 }
 
-func substr(input string, start, end int) string {
-	asRunes := []rune(input)
-
-	if start >= len(asRunes) || end > len(asRunes) || start >= end {
-		return ""
-	}
-
-	return string(asRunes[start:end])
-}
-
-func ConvertStringArray(lines []Line) [][]string {
-	var strs [][]string
-
+func ConvertStringArray(lines []Line) (strs [][]string) {
 	for _, line := range lines {
 		strs = append(strs, line.StringArr())
 	}
